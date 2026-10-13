@@ -1,0 +1,15 @@
+# Dependencies
+node_modules/
+
+# Environment files hold secrets, never upload them
+.env
+.env.*
+!.env.example
+
+# Build output
+dist/
+
+# Logs and system files
+*.log
+.DS_Store
+Thumbs.db
