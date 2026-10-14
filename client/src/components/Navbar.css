@@ -1,0 +1,98 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 20px;
+  background: #222;
+  color: white;
+}
+
+.navbar a {
+  color: white;
+  text-decoration: none;
+}
+
+.navbar-logo {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+/* On desktop the menu sits in the same row as the logo */
+.navbar-menu {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.navbar-links,
+.navbar-auth {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* The hamburger button is hidden on desktop */
+.navbar-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  padding: 6px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.navbar-toggle span {
+  display: block;
+  width: 24px;
+  height: 3px;
+  background: white;
+  border-radius: 2px;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+/* Turn the three lines into an X while the menu is open */
+.navbar-toggle.open span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+.navbar-toggle.open span:nth-child(2) {
+  opacity: 0;
+}
+.navbar-toggle.open span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+/* Small screens: show the hamburger and hide the menu until it is opened */
+@media (max-width: 768px) {
+  .navbar {
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .navbar-toggle {
+    display: flex;
+  }
+
+  .navbar-menu {
+    display: none;
+    flex-basis: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-top: 12px;
+    border-top: 1px solid #444;
+  }
+
+  .navbar-menu.open {
+    display: flex;
+  }
+
+  .navbar-links,
+  .navbar-auth {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+  }
+}

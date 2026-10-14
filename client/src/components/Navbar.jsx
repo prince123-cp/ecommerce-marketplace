@@ -1,48 +1,72 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import "./Navbar.css";
 
 function Navbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const closeMenu = () => setMenuOpen(false);
 
   const handleLogout = () => {
     logout();
+    closeMenu();
     navigate("/login");
   };
 
   return (
-    <nav style={{ display: "flex", gap: 16, padding: "12px 20px", background: "#222", color: "white", alignItems: "center" }}>
-      <Link to="/" style={{ color: "white", fontWeight: "bold" }}>E-Shop</Link>
+    <nav className="navbar">
+      <Link to="/" className="navbar-logo" onClick={closeMenu}>E-Shop</Link>
 
-      {user?.role === "buyer" && (
-        <>
-          <Link to="/cart" style={{ color: "white" }}>Cart</Link>
-          <Link to="/my-orders" style={{ color: "white" }}>My Orders</Link>
-          <Link to="/become-seller" style={{ color: "white" }}>Become a Seller</Link>
-        </>
-      )}
-      {user?.role === "seller" && (
-        <>
-            <Link to="/seller" style={{ color: "white" }}>Dashboard</Link>
-            <Link to="/seller/products" style={{ color: "white" }}>My Products</Link>
-            <Link to="/seller/orders" style={{ color: "white" }}>Orders</Link>
-        </>
-      )}
-      {user?.role === "admin" && <Link to="/admin" style={{ color: "white" }}>Admin Panel</Link>}
+      {/* Hamburger button, visible only on small screens */}
+      <button
+        className={`navbar-toggle ${menuOpen ? "open" : ""}`}
+        aria-label="Toggle menu"
+        aria-expanded={menuOpen}
+        onClick={() => setMenuOpen(!menuOpen)}
+      >
+        <span />
+        <span />
+        <span />
+      </button>
 
-      <span style={{ marginLeft: "auto" }}>
-        {user ? (
-          <>
-            {user.name} ({user.role}){" "}
-            <button onClick={handleLogout}>Logout</button>
-          </>
-        ) : (
-          <>
-            <Link to="/login" style={{ color: "white" }}>Login</Link>{" "}
-            <Link to="/register" style={{ color: "white" }}>Register</Link>
-          </>
-        )}
-      </span>
+      <div className={`navbar-menu ${menuOpen ? "open" : ""}`}>
+        <div className="navbar-links">
+          {user?.role === "buyer" && (
+            <>
+              <Link to="/cart" onClick={closeMenu}>Cart</Link>
+              <Link to="/my-orders" onClick={closeMenu}>My Orders</Link>
+              <Link to="/become-seller" onClick={closeMenu}>Become a Seller</Link>
+            </>
+          )}
+          {user?.role === "seller" && (
+            <>
+              <Link to="/seller" onClick={closeMenu}>Dashboard</Link>
+              <Link to="/seller/products" onClick={closeMenu}>My Products</Link>
+              <Link to="/seller/orders" onClick={closeMenu}>Orders</Link>
+            </>
+          )}
+          {user?.role === "admin" && (
+            <Link to="/admin" onClick={closeMenu}>Admin Panel</Link>
+          )}
+        </div>
+
+        <div className="navbar-auth">
+          {user ? (
+            <>
+              <span>{user.name} ({user.role})</span>
+              <button onClick={handleLogout}>Logout</button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" onClick={closeMenu}>Login</Link>
+              <Link to="/register" onClick={closeMenu}>Register</Link>
+            </>
+          )}
+        </div>
+      </div>
     </nav>
   );
 }
