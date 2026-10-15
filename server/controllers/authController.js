@@ -61,5 +61,27 @@ const loginUser = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+const updateLocation = async (req, res) => {
+  try{
+    const {latitude, longitude, city, pincode } = req.body
+    const lat = Number(latitude);
+    const lng = Number(longitude);
 
-module.exports = { registerUser, loginUser };
+    // Reject value that are not real coordinates.
+    if(!Number.isFinite(lat) || !Number.isFinite(lng) || lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+      return res.status(400).json({message: "valid latitude and longitude are required"});
+    }
+
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      { location: {latitude: lat, longitude: lng, city: city || "", pincode: pincode || ""}},
+      {new: true }
+    ).select("-password");
+
+    res.json(user);
+  }catch (error) {
+    res.status(500).json({message: error.message });
+  }
+};
+
+module.exports = { registerUser, loginUser, updateLocation };

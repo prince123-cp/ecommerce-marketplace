@@ -23,6 +23,12 @@ const userSchema = new mongoose.Schema(
       enum: ["buyer", "seller", "admin"],
       default: "buyer",
     },
+    location: {
+      latitude: Number,
+      longitude: Number,
+      city: String,
+      pincode: String,
+    },
   },
   { timestamps: true }
 );
